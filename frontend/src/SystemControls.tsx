@@ -2,20 +2,7 @@ import { useEffect, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
-interface SystemStatus {
-  SYSTEM_STATUS: "ACTIVE" | "PAUSED";
-  AI_MODE: string;
-  CRISIS_MODE: boolean;
-}
-
 export function SystemControls() {
-  const [status, setStatus] = useState<SystemStatus>({
-    SYSTEM_STATUS: "ACTIVE",
-    AI_MODE: "DRAFT_ONLY",
-    CRISIS_MODE: false
-  });
-
-  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,14 +10,9 @@ export function SystemControls() {
     try {
       const res = await fetch(`${API_BASE}/admin/status`);
       if (!res.ok) throw new Error("Status fetch failed");
-
-      const data = await res.json();
-      setStatus(data);
-      setError(null);
+      // intentionally ignore response
     } catch {
-      setError("Unable to fetch system status (retrying…)");
-    } finally {
-      setLoading(false);
+      setError("Unable to reach system status endpoint");
     }
   };
 
