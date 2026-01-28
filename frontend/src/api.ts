@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:4000";
+const API_BASE = "https://ai-content-agent-o702.onrender.com"; // Production Url
+// const API_BASE = "http://localhost:4000";  // Local Development environment 
+
 
 export async function getContent() {
   const res = await fetch(`${API_BASE}/content`);
@@ -30,7 +32,7 @@ export async function resolveCrisis() {
 }
 
 export async function submitForReview(id: string) {
-  return fetch(`http://localhost:4000/content/${id}/submit`, {
+  return fetch(`${API_BASE}/content/${id}/submit`, {
     method: "POST"
   });
 }
