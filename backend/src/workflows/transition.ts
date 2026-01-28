@@ -1,7 +1,7 @@
 import { ALLOWED_TRANSITIONS, ContentState, TransitionContext } from "./stateMachine";
 import { isTransitionAllowedBySystem } from "./systemGuards";
 import { logTransition } from "../storage/auditLog";
-import { getContent } from "../storage/contentStore";
+import { getContent, saveContent } from "../storage/contentStore";
 
 export function transitionContentState(
     contentId: string, to: ContentState, context: TransitionContext
