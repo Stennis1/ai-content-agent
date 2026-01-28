@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
 interface SystemStatus {
   SYSTEM_STATUS: "ACTIVE" | "PAUSED";
@@ -10,7 +10,7 @@ interface SystemStatus {
 
 export function SystemControls() {
   const [status, setStatus] = useState<SystemStatus>({
-    SYSTEM_STATUS: "ACTIVE",   // sensible default
+    SYSTEM_STATUS: "ACTIVE",
     AI_MODE: "DRAFT_ONLY",
     CRISIS_MODE: false
   });
@@ -26,9 +26,9 @@ export function SystemControls() {
 
       const data = await res.json();
       setStatus(data);
-      setError(null);        // clear error on success
+      setError(null);
     } catch {
-      setError("Unable to fetch system status (retrying…)"); // advisory only
+      setError("Unable to fetch system status (retrying…)");
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export function SystemControls() {
       if (!res.ok) throw new Error("Action failed");
 
       setMessage(successMessage);
-      await loadStatus(); // refresh truth from backend
+      await loadStatus();
     } catch {
       setError("System action failed");
     }
@@ -80,31 +80,9 @@ export function SystemControls() {
         </button>
       </div>
 
-      {/* Feedback */}
+      {/* Feedback only */}
       {message && <p style={{ color: "green" }}>{message}</p>}
       {error && <p style={{ color: "orange" }}>{error}</p>}
-
-      {/* System state display */}
-      <div
-        style={{
-          marginTop: 12,
-          padding: 10,
-          border: "1px solid #ddd",
-          background: "#fafafa"
-        }}
-      >
-        <strong>Current System State</strong>
-
-        {loading ? (
-          <p style={{ marginTop: 6 }}>
-            Waiting for system status… Default: <strong>ACTIVE</strong>
-          </p>
-        ) : (
-          <pre style={{ marginTop: 6 }}>
-            {JSON.stringify(status, null, 2)}
-          </pre>
-        )}
-      </div>
     </div>
   );
 }
